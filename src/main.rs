@@ -6,11 +6,10 @@ use pomo::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let configuration = Config::new(&args);
+    let configuration = Config::new(&args).expect("Unable to parse flags");
+    let pomo_duration = configuration.duration();
 
-    let pomo_duration = Duration::from_secs(configuration.pomo_minutes * 60);
-
-    println!("Starting pomodoro timer for {} minutes.", configuration.pomo_minutes);
+    println!("Starting pomodoro timer for {} minutes.", pomo_duration.as_secs() / 60);
 
     let start = Instant::now();
     let end = start.add(pomo_duration);
@@ -18,7 +17,7 @@ fn main() {
     while Instant::now() < end {
         let time_remaining = end.sub(Instant::now());
         println!("Remaining: {}.", format(time_remaining));
-        thread::sleep(pomo_duration / configuration.pomo_minutes as u32);
+        thread::sleep(Duration::from_secs(60));
     }
 
     display_notification();

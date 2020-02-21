@@ -1,7 +1,9 @@
 
-* refactor & test
+[] refactor & test
+    [] modularize
 
-* proper error message for invalid duration
-* break timer
-* break timer 1/5 of pomo by default
-* break timer flag
+[] notification sound
+[] proper error message for invalid duration
+[] break timer
+[] break timer 1/5 of pomo by default
+[] break timer flag
