@@ -1,6 +1,5 @@
 use clap::{App, Arg};
 use std::time::Duration;
-use std::error::Error;
 
 const DURATION_FLAG_NAME: &str = "duration";
 const DEFAULT_DURATION: &str = "25";
@@ -10,7 +9,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, Error> {
+    pub fn new(args: &[String]) -> Result<Config, &'static str> {
         let matches = App::new("Pomo timer")
             .version("0.0.1")
             .author("Kevin Peek <kevpeek@gmail.com>")
