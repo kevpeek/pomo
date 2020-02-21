@@ -1,30 +1,16 @@
-use std::time::{Instant, Duration};
-use std::thread;
+use std::{env, thread};
 use std::ops::{Add, Sub};
-
-use clap::{Arg, App};
 use std::process::{Command, Stdio};
-
-const DURATION_FLAG_NAME: &str = "duration";
+use std::time::{Duration, Instant};
+use pomo::Config;
 
 fn main() {
-    let matches = App::new("Pomo timer")
-        .version("0.0.1")
-        .author("Kevin Peek <kevpeek@gmail.com>")
-        .about("A simple pomodoro timer.")
-        .arg(Arg::with_name(DURATION_FLAG_NAME)
-            .short("d")
-            .long("duration")
-            .takes_value(true)
-            .default_value("25")
-            .help("The duration of the pomodoro, in minutes."))
-        .get_matches();
+    let args: Vec<String> = env::args().collect();
+    let configuration = Config::new(&args);
 
-    let pomo_minutes = matches.value_of(DURATION_FLAG_NAME).unwrap();
-    let pomo_minutes = pomo_minutes.parse::<u64>().expect("Invalid duration supplied");
-    let pomo_duration = Duration::from_secs(pomo_minutes * 60);
+    let pomo_duration = Duration::from_secs(configuration.pomo_minutes * 60);
 
-    println!("Starting pomodoro timer for {} minutes.", pomo_minutes);
+    println!("Starting pomodoro timer for {} minutes.", configuration.pomo_minutes);
 
     let start = Instant::now();
     let end = start.add(pomo_duration);
@@ -32,11 +18,13 @@ fn main() {
     while Instant::now() < end {
         let time_remaining = end.sub(Instant::now());
         println!("Remaining: {}.", format(time_remaining));
-        thread::sleep(pomo_duration / pomo_minutes as u32);
+        thread::sleep(pomo_duration / configuration.pomo_minutes as u32);
     }
 
     display_notification();
 }
+
+
 
 fn display_notification() {
     let title = "Pomodoro finished.";
