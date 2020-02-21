@@ -44,14 +44,14 @@ mod tests {
     #[test]
     fn config_new_default_params() {
         let args = [String::from("pomo")];
-        let config = Config::new(&args);
+        let config = Config::new(&args).unwrap();
         assert_eq!(25, config.pomo_minutes);
     }
 
     #[test]
     fn config_new_parses_short_flag() {
         let args = [String::from("pomo"), String::from("-d"), String::from("11")];
-        let config = Config::new(&args);
+        let config = Config::new(&args).unwrap();
         assert_eq!(11, config.pomo_minutes);
     }
 
