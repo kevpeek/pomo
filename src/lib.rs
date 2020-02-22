@@ -11,14 +11,12 @@ use rodio::Source;
 use std::thread;
 
 
-pub fn notify() {
+pub fn notify(title: &str, message: &str) {
     let device = rodio::default_output_device().unwrap();
     let file = File::open("/Users/kevinpeek/Downloads/beep.ogg").unwrap();
     let source = rodio::Decoder::new(BufReader::new(file)).unwrap();
     rodio::play_raw(&device, source.convert_samples());
 
-    let title = "Pomodoro finished.";
-    let message = "Done";
     let notification_command = format!("display notification \"{}\" with title \"{}\"", title, message);
     Command::new("osascript")
         .arg("-e")

@@ -1,10 +1,7 @@
-
-[*] refactor & test
-    [*] modularize
-
-[*] notification sound
-[*] better error message for invalid duration
-[] break timer
-[] break timer 1/5 of pomo by default
-[] break timer flag
+[*] break timer
+[*] break timer 1/5 of pomo by default
+[] break timer configuration
 [] long breaks
+[] sound configuration
+    [] sound location env var
+    [] separate break sound
