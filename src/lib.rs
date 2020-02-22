@@ -1,65 +1,38 @@
-use clap::{App, Arg};
+// Reexport items from other modules.
+mod pomo_config;
+pub use pomo_config::Config;
+
+use std::process::{Command, Stdio};
 use std::time::Duration;
 
-const DURATION_FLAG_NAME: &str = "duration";
-const DEFAULT_DURATION: &str = "25";
+use std::fs::File;
+use std::io::BufReader;
+use rodio::Source;
+use std::thread;
 
-pub struct Config {
-    pomo_minutes: u64
-}
 
-impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        let matches = App::new("Pomo timer")
-            .version("0.0.1")
-            .author("Kevin Peek <kevpeek@gmail.com>")
-            .about("A simple pomodoro timer.")
-            .arg(Arg::with_name(DURATION_FLAG_NAME)
-                .short("d")
-                .long("duration")
-                .takes_value(true)
-                .default_value(DEFAULT_DURATION)
-                .help("The duration of the pomodoro, in minutes."))
-            .get_matches_from(args);
-        let pomo_minutes = matches.value_of(DURATION_FLAG_NAME).unwrap();
-        let pomo_minutes = pomo_minutes.parse::<u64>().expect("Invalid duration supplied");
-        let configuration = Config { pomo_minutes };
-        Ok(configuration)
-    }
-}
+pub fn notify() {
+    let device = rodio::default_output_device().unwrap();
+    let file = File::open("/Users/kevinpeek/Downloads/beep.ogg").unwrap();
+    let source = rodio::Decoder::new(BufReader::new(file)).unwrap();
+    rodio::play_raw(&device, source.convert_samples());
 
-impl Config {
-    pub fn duration(self: &Config) -> Duration {
-        return Duration::from_secs(self.pomo_minutes * 60);
-    }
+    let title = "Pomodoro finished.";
+    let message = "Done";
+    let notification_command = format!("display notification \"{}\" with title \"{}\"", title, message);
+    Command::new("osascript")
+        .arg("-e")
+        .arg(notification_command)
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .output()
+        .expect("failed to execute process");
+
+    thread::sleep(Duration::from_secs(4));
 }
 
 
-
-#[cfg(test)]
-mod tests {
-    use crate::{Config};
-    use std::time::Duration;
-
-    #[test]
-    fn config_new_default_params() {
-        let args = [String::from("pomo")];
-        let config = Config::new(&args).unwrap();
-        assert_eq!(25, config.pomo_minutes);
-    }
-
-    #[test]
-    fn config_new_parses_short_flag() {
-        let args = [String::from("pomo"), String::from("-d"), String::from("11")];
-        let config = Config::new(&args).unwrap();
-        assert_eq!(11, config.pomo_minutes);
-    }
-
-    #[test]
-    fn config_duration() {
-        let config = Config{ pomo_minutes: 11 };
-        let duration = config.duration();
-        assert_eq!(Duration::from_secs(11 * 60), duration);
-    }
-
+pub fn format(d: Duration) -> String {
+    let minutes = d.as_secs() as f64 / 60.0;
+    return format!("{:.0} minutes", minutes);
 }
