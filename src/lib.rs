@@ -6,6 +6,7 @@ use std::process::{Command, Stdio};
 use std::time::Duration;
 
 use rodio::Sink;
+use std::env;
 use std::fs::File;
 use std::io::BufReader;
 
@@ -22,12 +23,19 @@ pub fn notify(title: &str, message: &str) {
         .output()
         .expect("failed to execute process");
 
+    let sound_file_path = pomo_sound_path().unwrap();
+    let file = File::open(sound_file_path).unwrap();
+    let source = rodio::Decoder::new(BufReader::new(file)).unwrap();
+
     let device = rodio::default_output_device().unwrap();
     let sink = Sink::new(&device);
-    let file = File::open("/Users/kevinpeek/Downloads/beep.ogg").unwrap();
-    let source = rodio::Decoder::new(BufReader::new(file)).unwrap();
     sink.append(source);
     sink.sleep_until_end();
+}
+
+fn pomo_sound_path() -> Option<String> {
+    let sound_file_path = env::var("POMO_SOUND").unwrap();
+    Some(sound_file_path)
 }
 
 pub fn format(d: Duration) -> String {
