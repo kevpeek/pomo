@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: fmt
+      run: cargo fmt -- --check
     - name: Setup
       run: sudo apt-get install --assume-yes libasound2-dev
     - name: Build
