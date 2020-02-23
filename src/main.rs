@@ -3,9 +3,6 @@ use std::ops::{Add, Sub};
 use std::time::{Duration, Instant};
 use std::{env, process, thread};
 
-
-
-
 fn main() {
     let configuration = build_config();
     let pomo_duration = configuration.duration();
