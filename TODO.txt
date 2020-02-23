@@ -1,5 +1,7 @@
 [*] break timer
 [*] break timer 1/5 of pomo by default
+[*] update readme
+[] rust format?
 [] break timer configuration
 [] long breaks
 [] sound configuration
