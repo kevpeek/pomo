@@ -5,13 +5,15 @@ pub use pomo_config::Config;
 use std::process::{Command, Stdio};
 use std::time::Duration;
 
+use rodio::Sink;
 use std::fs::File;
 use std::io::BufReader;
-use rodio::{Sink};
-
 
 pub fn notify(title: &str, message: &str) {
-    let notification_command = format!("display notification \"{}\" with title \"{}\"", title, message);
+    let notification_command = format!(
+        "display notification \"{}\" with title \"{}\"",
+        title, message
+    );
     Command::new("osascript")
         .arg("-e")
         .arg(notification_command)
@@ -28,7 +30,6 @@ pub fn notify(title: &str, message: &str) {
     sink.sleep_until_end();
 }
 
-
 pub fn format(d: Duration) -> String {
     let minutes = d.as_secs() as f64 / 60.0;
     return format!("{:.0} minutes", minutes);
@@ -37,7 +38,5 @@ pub fn format(d: Duration) -> String {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn sandbox() {
-
-    }
+    fn sandbox() {}
 }

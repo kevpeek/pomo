@@ -1,15 +1,15 @@
-use std::{env, thread, process};
+use pomo::Config;
 use std::ops::{Add, Sub};
 use std::time::{Duration, Instant};
-use pomo::{Config};
-
-
-
+use std::{env, process, thread};
 
 fn main() {
     let configuration = build_config();
     let pomo_duration = configuration.duration();
-    println!("Starting pomodoro timer for {} minutes.", pomo_duration.as_secs() / 60);
+    println!(
+        "Starting pomodoro timer for {} minutes.",
+        pomo_duration.as_secs() / 60
+    );
 
     execute_pomo(pomo_duration);
     execute_break(pomo_duration);
