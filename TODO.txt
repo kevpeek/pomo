@@ -1,8 +1,9 @@
 [] sound configuration
     [] improve sound configuration
-    [] improve notification ack interaction
+    [*] improve notification ack interaction
     [] separate break sound
 [*] progress bar instead of logs
-    [] clean up progress bar code
+    [*] clean up progress bar code
+    [] improve appearance of progress bar
 [] break timer configuration
 [] long breaks

@@ -37,8 +37,10 @@ fn play_alert_from_file(path: String) {
 
     sink.append(source.repeat_infinite());
 
+    // play the sound until the user acknowledges the alert.
     Confirmation::new()
-        .with_text("Ready to continue?")
+        .with_text("Press enter to continue")
+        .show_default(false)
         .interact()
         .unwrap();
     sink.stop();
