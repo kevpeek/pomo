@@ -6,10 +6,6 @@ use std::{env, process, thread};
 fn main() {
     let configuration = build_config();
     let pomo_duration = configuration.duration();
-    println!(
-        "Starting pomodoro timer for {} minutes.",
-        pomo_duration.as_secs() / 60
-    );
 
     execute_pomo(pomo_duration);
     execute_break(pomo_duration);
@@ -25,6 +21,11 @@ fn build_config() -> Config {
 }
 
 fn execute_pomo(pomo_duration: Duration) {
+    println!(
+        "Starting pomodoro timer for {} minutes.",
+        pomo_duration.as_secs() / 60
+    );
+
     let pomo_start = Instant::now();
     let pomo_end = pomo_start.add(pomo_duration);
     while Instant::now() < pomo_end {
@@ -37,6 +38,12 @@ fn execute_pomo(pomo_duration: Duration) {
 
 fn execute_break(pomo_duration: Duration) {
     let break_duration = pomo_duration / 5;
+
+    println!(
+        "Taking a break for {} minutes.",
+        break_duration.as_secs() / 60
+    );
+
     thread::sleep(break_duration);
     pomo::notify("Break finished.", "Done");
 }

@@ -11,17 +11,10 @@ pub struct Config {
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
         let matches = App::new("Pomo timer")
-            .version("0.1.0")
+            .version(env!("CARGO_PKG_VERSION"))
             .author("Kevin Peek <kevpeek@gmail.com>")
             .about("A simple pomodoro timer.")
-            .arg(
-                Arg::with_name(DURATION_FLAG_NAME)
-                    .short("d")
-                    .long("duration")
-                    .takes_value(true)
-                    .default_value(DEFAULT_DURATION)
-                    .help("The duration of the pomodoro, in minutes."),
-            )
+            .arg(Config::duration_arg())
             .get_matches_from(args);
 
         let pomo_minutes = matches.value_of(DURATION_FLAG_NAME).unwrap();
@@ -31,6 +24,16 @@ impl Config {
         };
 
         Ok(Config { pomo_minutes })
+    }
+
+    // duration_arg returns an clap::Arg for the --duration flag.
+    fn duration_arg<'a, 'b>() -> Arg<'a, 'b> {
+        Arg::with_name(DURATION_FLAG_NAME)
+            .short("d")
+            .long("duration")
+            .takes_value(true)
+            .default_value(DEFAULT_DURATION)
+            .help("The duration of the pomodoro, in minutes.")
     }
 }
 
