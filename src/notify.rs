@@ -6,6 +6,8 @@ use std::env;
 use std::fs::File;
 use std::io::BufReader;
 
+use dialoguer::Confirmation;
+
 // notify alerts the user via a desktop notification and audible alert.
 pub fn notify(title: &str, message: &str) {
     let notification_command = format!(
@@ -32,8 +34,14 @@ fn play_alert_from_file(path: String) {
 
     let device = rodio::default_output_device().unwrap();
     let sink = Sink::new(&device);
-    sink.append(source);
-    sink.sleep_until_end();
+
+    sink.append(source.repeat_infinite());
+
+    Confirmation::new()
+        .with_text("Ready to continue?")
+        .interact()
+        .unwrap();
+    sink.stop();
 }
 
 fn play_default_alert() {

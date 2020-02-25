@@ -1,8 +1,8 @@
+[] sound configuration
+    [] improve sound configuration
+    [] improve notification ack interaction
+    [] separate break sound
+[*] progress bar instead of logs
+    [] clean up progress bar code
 [] break timer configuration
 [] long breaks
-[] sound configuration
-    [*] sound location env var
-    [] move sound path to config
-    [*] default behavior when no sound specified
-    [] separate break sound
-[*] add logs for break

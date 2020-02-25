@@ -1,5 +1,6 @@
+use indicatif::ProgressBar;
 use pomo::Config;
-use std::ops::{Add, Sub};
+use std::ops::Add;
 use std::time::{Duration, Instant};
 use std::{env, process, thread};
 
@@ -28,11 +29,15 @@ fn execute_pomo(pomo_duration: Duration) {
 
     let pomo_start = Instant::now();
     let pomo_end = pomo_start.add(pomo_duration);
+
+    let bar = ProgressBar::new(100);
+    bar.tick(); // force the bar to show
+
     while Instant::now() < pomo_end {
-        let time_remaining = pomo_end.sub(Instant::now());
-        println!("Remaining: {}.", pomo::format(time_remaining));
-        thread::sleep(Duration::from_secs(60));
+        thread::sleep(pomo_duration / 100);
+        bar.inc(1);
     }
+    bar.finish();
     pomo::notify("Pomodoro finished.", "Done");
 }
 
@@ -44,6 +49,16 @@ fn execute_break(pomo_duration: Duration) {
         break_duration.as_secs() / 60
     );
 
-    thread::sleep(break_duration);
+    let break_start = Instant::now();
+    let break_end = break_start.add(break_duration);
+
+    let bar = ProgressBar::new(100);
+    bar.tick(); // force the bar to show
+
+    while Instant::now() < break_end {
+        thread::sleep(break_duration / 100);
+        bar.inc(1);
+    }
+    bar.finish();
     pomo::notify("Break finished.", "Done");
 }
