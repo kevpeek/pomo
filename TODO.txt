@@ -4,6 +4,6 @@
     [] separate break sound
 [*] progress bar instead of logs
     [*] clean up progress bar code
-    [] improve appearance of progress bar
+    [*] improve appearance of progress bar
 [] break timer configuration
 [] long breaks
