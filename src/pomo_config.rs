@@ -17,6 +17,7 @@ impl Config {
             .arg(Config::duration_arg())
             .get_matches_from(args);
 
+        // duration arg has a default value, so this will be Some()
         let pomo_minutes = matches.value_of(DURATION_FLAG_NAME).unwrap();
         let pomo_minutes = match pomo_minutes.parse::<u64>() {
             Ok(v) => v,
@@ -35,11 +36,10 @@ impl Config {
             .default_value(DEFAULT_DURATION)
             .help("The duration of the pomodoro, in minutes.")
     }
-}
 
-impl Config {
+    #[must_use]
     pub fn duration(self: &Config) -> Duration {
-        return Duration::from_secs(self.pomo_minutes * 60);
+        Duration::from_secs(self.pomo_minutes * 60)
     }
 }
 

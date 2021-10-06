@@ -56,8 +56,8 @@ fn play_default_alert() {
 
 // pomo_sound_path tries to read the sound file path from the ENV.
 fn pomo_sound_path() -> Option<String> {
-    return match env::var("POMO_SOUND") {
+    match env::var("POMO_SOUND") {
         Ok(path) => Some(path),
         Err(_) => None,
-    };
+    }
 }
